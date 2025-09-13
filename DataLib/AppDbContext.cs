@@ -1,5 +1,5 @@
 ﻿
-using DataLib.Models;
+using DataLib.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataLib
@@ -52,7 +52,6 @@ namespace DataLib
                     p.SecondName
                 });
             });
-            
         }
     }
 }

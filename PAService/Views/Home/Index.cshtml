@@ -1,8 +1,32 @@
-﻿@{
+﻿@using DataLib.Entities
+@model IEnumerable<PersonalAccount>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<h1 class=" text-center text-info">Лицевые счета</h1>
+
+<div class="text-right">
+    <a asp-action="Create" class="btn btn-primary mx-1 my-1">Добавить</a>
 </div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(m => m.Number)</th>
+            <th>@Html.DisplayNameFor(m => m.Address)</th>
+            <th>@Html.DisplayNameFor(m => m.Area)</th>
+            <th>@Html.DisplayNameFor(m => m.ResidentsCount)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td width="20%">@Html.DisplayFor(x => item.Number)</td>
+                <td width="20%">@Html.DisplayFor(x => item.Address)</td>
+                <td width="20%">@Html.DisplayFor(x => item.Area)</td>
+                <td width="20%">@Html.DisplayFor(x => item.ResidentsCount)</td>
+            </tr>
+        }
+    </tbody>
+</table>
