@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36429.23 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PAService", "PAService\PAService.csproj", "{61D3EA9F-CA4C-45B5-B1A1-F505D56DFF96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLib", "DataLib\DataLib.csproj", "{2598067F-7DCD-4C8E-87ED-C4ABE59CEE37}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{61D3EA9F-CA4C-45B5-B1A1-F505D56DFF96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61D3EA9F-CA4C-45B5-B1A1-F505D56DFF96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61D3EA9F-CA4C-45B5-B1A1-F505D56DFF96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61D3EA9F-CA4C-45B5-B1A1-F505D56DFF96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2598067F-7DCD-4C8E-87ED-C4ABE59CEE37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2598067F-7DCD-4C8E-87ED-C4ABE59CEE37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2598067F-7DCD-4C8E-87ED-C4ABE59CEE37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2598067F-7DCD-4C8E-87ED-C4ABE59CEE37}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0FF8B742-B153-4CF6-AA5A-9B7AFADAC3C1}
+	EndGlobalSection
+EndGlobal
