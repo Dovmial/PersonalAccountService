@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using PAService.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PAService.Services.Implemantations
@@ -40,12 +39,29 @@ namespace PAService.Services.Implemantations
             catch (Exception ex)
             {
                 _logger.LogError("error creating accaunt: {ex}", ex);
-                await transaction.RollbackAsync(); 
+                await transaction.RollbackAsync();
                 throw;
             }
         }
 
-        public async Task<ICollection<PersonalAccount>> Get()
-            => await _dbContext.PersonalAccounts.ToListAsync();
+        public Task DeleteAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<ICollection<PersonalAccount>> GetAsync()
+        {
+            return await _dbContext.PersonalAccounts.ToListAsync();
+        }
+
+        public Task GetByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateAsync(PersonalAccount resident)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

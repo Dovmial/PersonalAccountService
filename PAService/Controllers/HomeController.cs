@@ -2,6 +2,7 @@
 using DataLib.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using PAService.DTOs;
 using PAService.Models;
 using PAService.Services.Implemantations;
 using PAService.Services.Interfaces;
@@ -27,26 +28,26 @@ namespace PAService.Controllers
 
         public async Task<ActionResult> Index()
         {
-            return View(await _paService.Get());
+            return View(await _paService.GetAsync());
         }
 
         [HttpGet]
         public ActionResult Create()
         {
-            
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(PersonalAccount account)
+        public async Task<ActionResult> Create(PersonalAccountDTO accountDTO)
         {
             if (ModelState.IsValid)
             {
+                var account = accountDTO.ToEntity();
                 await _paService.CreateAsync(account);
                 return RedirectToAction(nameof(Index));
             }
-            return View(account);
+            return View(accountDTO);
         }
 
         public IActionResult Privacy()

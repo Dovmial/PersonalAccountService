@@ -37,7 +37,6 @@ namespace DataLib
                     .HasMaxLength(50);
 
                 entity.Property(r => r.SecondName)
-                    .IsRequired()
                     .HasMaxLength(50);
 
                 entity.Property(r => r.LastName)

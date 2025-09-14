@@ -12,10 +12,10 @@ namespace DataLib.Entities
         [Display(Name = "Имя")]
         public string FirstName { get; set; }
 
-        [Display(Name = "Фамилия")]
+        [Display(Name = "Отчество")]
         public string SecondName { get; set; }
 
-        [Display(Name = "Отчество")]
+        [Display(Name = "Фамилия")]
         public string LastName { get; set; }
 
         [NotMapped]

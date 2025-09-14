@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using DataLib;
+using DataLib.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,15 +31,19 @@ namespace PAService
         {
             string connString = Configuration.GetConnectionString("DefaultConnection");
             services.AddControllersWithViews();
-            services.AddDbContext<AppDbContext>(
-                options => options.UseSqlite(connString));
+            services.AddDbContext<AppDbContext>(options => options.UseSqlite(connString));
 
             services.AddScoped<IPersonalAccountService, PersonalAccountService>();
+            services.AddScoped<IResidentService, ResidentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var culture = new CultureInfo("ru-Ru");
+            CultureInfo.DefaultThreadCurrentCulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

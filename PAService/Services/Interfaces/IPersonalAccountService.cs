@@ -6,8 +6,7 @@ namespace PAService.Services.Interfaces
 {
     public interface IPersonalAccountService
     {
-        Task<ICollection<PersonalAccount>> Get();
+        Task<ICollection<PersonalAccount>> GetAsync();
         Task CreateAsync(PersonalAccount account);
-        
     }
 }

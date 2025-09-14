@@ -1,0 +1,55 @@
+﻿@using DataLib.Entities
+@model IEnumerable<Resident>
+
+@{
+    ViewData["Title"] = "ResidentsByHome Page";
+    int accountId = ViewBag.AccountId;
+}
+
+<h1 class="text-center text-info">Жильцы</h1>
+
+<div class="text-right">
+    <a asp-action="Create" class="btn btn-primary mx-1 my-1">Добавить</a>
+</div>
+<table class="table-bordered mx-auto">
+    <thead>
+        <tr class="align-middle text-center">
+            <th>@Html.DisplayNameFor(m => m.LastName)</th>
+            <th>@Html.DisplayNameFor(m => m.FirstName)</th>
+            <th>@Html.DisplayNameFor(m => m.SecondName)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="align-middle text-center">
+                <td width="25%">@Html.DisplayFor(x => item.LastName)</td>
+                <td width="25%">@Html.DisplayFor(x => item.FirstName)</td>
+                <td width="25%">@Html.DisplayFor(x => item.SecondName)</td>
+                <td width="25%" class="table-borderless ">
+                    <table class="mx-auto">
+                        <tbody>
+                            <tr>
+                                <td width="50%">
+                                    <a class="btn btn-success w-100" asp-action="Create" >Асcount</a>
+                                </td>
+                                <td width="50%">
+                                    <a class="btn btn-info w-100" asp-action="Create">Инфо</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="50%">
+                                    <a class="btn btn-warning w-100" asp-action="Create">Изменить</a>
+                                </td>
+                                <td width="50%">
+                                    <a class="btn btn-danger w-100" asp-action="Create">Удалить</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

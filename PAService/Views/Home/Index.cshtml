@@ -9,9 +9,9 @@
 <div class="text-right">
     <a asp-action="Create" class="btn btn-primary mx-1 my-1">Добавить</a>
 </div>
-<table class="table">
+<table class="table-bordered mx-auto">
     <thead>
-        <tr>
+        <tr class="align-middle text-center">
             <th>@Html.DisplayNameFor(m => m.Number)</th>
             <th>@Html.DisplayNameFor(m => m.Address)</th>
             <th>@Html.DisplayNameFor(m => m.Area)</th>
@@ -21,11 +21,33 @@
     <tbody>
         @foreach(var item in Model)
         {
-            <tr>
-                <td width="20%">@Html.DisplayFor(x => item.Number)</td>
-                <td width="20%">@Html.DisplayFor(x => item.Address)</td>
-                <td width="20%">@Html.DisplayFor(x => item.Area)</td>
-                <td width="20%">@Html.DisplayFor(x => item.ResidentsCount)</td>
+            <tr class="align-middle text-center">
+                <td width="10%">@Html.DisplayFor(x => item.Number)</td>
+                <td width="50%">@Html.DisplayFor(x => item.Address)</td>
+                <td width="10%">@Html.DisplayFor(x => item.Area)</td>
+                <td width="10%">@Html.DisplayFor(x => item.ResidentsCount)</td>
+                <td width="20%" class="table-borderless ">
+                    <table class="mx-auto">
+                        <tbody>
+                            <tr>
+                                <td width="50%">
+                                    <a asp-controller="Resident" asp-action="Index" class="btn btn-success w-100" asp-route-accountId="@item.Id">Жильцы</a>
+                                </td>
+                                <td width="50%">
+                                    <a class="btn btn-info w-100" asp-action="Details" asp-route-id="@item.Id">Инфо</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="50%">
+                                    <a class="btn btn-warning w-100" asp-action="Update" asp-route-id="@item.Id">Изменить</a>
+                                </td>
+                                <td width="50%">
+                                    <a class="btn btn-danger w-100" asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
             </tr>
         }
     </tbody>
