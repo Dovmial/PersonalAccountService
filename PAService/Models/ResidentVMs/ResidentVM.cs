@@ -6,6 +6,7 @@ using System.Linq;
 namespace PAService.Models.ResidentVMs
 {
     public sealed record ResidentVM(
+        int Id,
 
         [Required(ErrorMessage = "Обязательное поле")]
         [MaxLength(50, ErrorMessage = "не более 50 символов")]

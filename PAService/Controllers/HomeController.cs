@@ -73,6 +73,7 @@ namespace PAService.Controllers
                 var accountToUpdate = await _paService.GetByIdAsync(accountUpdateVM.Id, cancellationToken);
                 accountUpdateVM.ToUpdateEntity(accountToUpdate);
                 await _paService.UpdateAsync(accountToUpdate, cancellationToken);
+                return RedirectToAction(nameof(Index));
             }
             _logger.LogError("модель не валидна");
             return View(accountUpdateVM);

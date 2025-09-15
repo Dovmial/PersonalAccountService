@@ -30,7 +30,7 @@ namespace PAService.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Create()
+        public ActionResult Create()
         {
             return View();
         }
@@ -47,6 +47,23 @@ namespace PAService.Controllers
             }
             var resident = residentDto.ToEntity();
             await _residentService.CreateAsync(resident, cancellationToken);
+            return RedirectToAction(nameof(Index), "Home");
+        }
+
+        public async Task<ActionResult> Update(ResidentVM residentVm, CancellationToken cancellationToken)
+        {
+            if(residentVm.Id < 1)
+                return NotFound();
+            var resident = residentVm.ToEntity();
+            await _residentService.UpdateAsync(resident, cancellationToken);
+            return RedirectToAction(nameof(Index), "Home");
+        }
+
+        public async Task<ActionResult> Delete(int id, CancellationToken cancellationToken)
+        {
+            if (id < 1)
+                return NotFound();
+            await _residentService.DeleteAsync(id, cancellationToken);
             return RedirectToAction(nameof(Index), "Home");
         }
     }
