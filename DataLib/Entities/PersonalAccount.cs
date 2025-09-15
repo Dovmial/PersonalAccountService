@@ -31,5 +31,11 @@ namespace DataLib.Entities
         [NotMapped]
         [Display(Name = "Количство проживающих")]
         public int ResidentsCount => Residents.Count;
+
+        public bool IsActive(DateTime? date)
+        {
+            var checkDate = date ?? DateTime.Today;
+            return DateActivate <= checkDate && (!DateFinish.HasValue || DateFinish.Value > checkDate);
+        }
     }
 }

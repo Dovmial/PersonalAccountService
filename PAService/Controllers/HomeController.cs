@@ -1,14 +1,11 @@
 ﻿
-using DataLib.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using PAService.DTOs;
 using PAService.Models;
-using PAService.Services.Implemantations;
+using PAService.Models.PersonalAccountVMs;
 using PAService.Services.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PAService.Controllers
@@ -26,9 +23,12 @@ namespace PAService.Controllers
             _paService = paService;
         }
 
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(CancellationToken cancellationToken)
         {
-            return View(await _paService.GetAsync());
+            var accounts = await _paService.GetAsync(
+                withResidents: true,
+                cancellationToken: cancellationToken);
+            return View(accounts);
         }
 
         [HttpGet]
@@ -39,15 +39,43 @@ namespace PAService.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(PersonalAccountDTO accountDTO)
+        public async Task<ActionResult> Create(PersonalAccountCreateVM accountVM, CancellationToken cancellationToken)
         {
             if (ModelState.IsValid)
             {
-                var account = accountDTO.ToEntity();
-                await _paService.CreateAsync(account);
+                var account = accountVM.ToEntity();
+                await _paService.CreateAsync(account, cancellationToken);
                 return RedirectToAction(nameof(Index));
             }
-            return View(accountDTO);
+            _logger.LogError("модель не валидна");
+            return View(accountVM);
+        }
+
+        public async Task<ActionResult> Delete(int accountId, CancellationToken cancellationToken)
+        {
+            if(accountId < 1)
+                return NotFound();
+
+            await _paService.DeleteAsync(accountId, cancellationToken);
+            _logger.LogInformation("Удаление {id} успешно", accountId);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<ActionResult> Update(
+            PersonalAccountUpdateVM accountUpdateVM,
+            CancellationToken cancellationToken)
+        {
+            if (accountUpdateVM.Id < 1)
+                return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                var accountToUpdate = await _paService.GetByIdAsync(accountUpdateVM.Id, cancellationToken);
+                accountUpdateVM.ToUpdateEntity(accountToUpdate);
+                await _paService.UpdateAsync(accountToUpdate, cancellationToken);
+            }
+            _logger.LogError("модель не валидна");
+            return View(accountUpdateVM);
         }
 
         public IActionResult Privacy()

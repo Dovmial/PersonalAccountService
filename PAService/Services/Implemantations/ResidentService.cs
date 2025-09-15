@@ -1,11 +1,12 @@
 ﻿using DataLib;
 using DataLib.Entities;
+using DataLib.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PAService.Services.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PAService.Services.Implemantations
@@ -21,14 +22,15 @@ namespace PAService.Services.Implemantations
             _logger = logger;
             _dbContext = dbContext;
         }
-        public async Task<ICollection<Resident>> GetAllAsync()
+        public async Task<ICollection<Resident>> GetAllAsync(bool withPersonalAccount, CancellationToken cancellationToken)
         {
             return await _dbContext.Residents
                 .AsNoTracking()
+                .WithPersonalAccounts(withPersonalAccount)
                 .ToListAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken)
         {
             var resident = await _dbContext.Residents.FirstAsync(x => x.Id == id);
             if (resident is null)
@@ -42,26 +44,31 @@ namespace PAService.Services.Implemantations
             _logger.LogInformation($"Жилец [{id}] удален");
         }
 
-        public Task GetByIdAsync(int id)
+        public Task GetByIdAsync(int id, CancellationToken cancellationToken)
         {
             return _dbContext.Residents
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task CreateAsync(Resident resident)
+        public async Task CreateAsync(Resident resident, CancellationToken cancellationToken)
         {
             await _dbContext.Residents.AddAsync(resident);
             await _dbContext.SaveChangesAsync();
+            _logger.LogInformation("Жилец создан {id}", resident.Id);
         }
 
-        public async Task UpdateAsync(Resident resident)
+        public async Task UpdateAsync(Resident resident, CancellationToken cancellationToken)
         {
             _dbContext.Update(resident);
             await _dbContext.SaveChangesAsync();
+            _logger.LogInformation("Данные жильца {id} обновлены", resident.Id);
         }
 
-        public async Task AddPersonalAccount(Resident resident, int accountId)
+        public async Task AddToPersonalAccount(
+            Resident resident,
+            int accountId, 
+            CancellationToken cancellationToken)
         {
             if (accountId != 0)
             {
@@ -69,12 +76,17 @@ namespace PAService.Services.Implemantations
                 if (account is not null)
                 {
                     resident.PersonalAccounts.Add(account);
-                    await _dbContext.SaveChangesAsync();
+                    await _dbContext.SaveChangesAsync(cancellationToken);
+                    _logger.LogInformation("к лицевому счету {number} добален жилец {residentId}",
+                        account.Number, resident.Id);
                 }
+                _logger.LogWarning($"Лицевой счет [{accountId.ToString("D10")}] не найден");
             }
         }
 
-        public async Task<ICollection<Resident>> GetResidentsByPersonalAccountId(int personalAccountId)
+        public async Task<ICollection<Resident>> GetResidentsByPersonalAccountId(
+            int personalAccountId,
+            CancellationToken cancellationToken)
         {
             if (personalAccountId == 0)
                 return new List<Resident>();
@@ -82,7 +94,7 @@ namespace PAService.Services.Implemantations
             var account = await _dbContext.PersonalAccounts
                 .AsNoTracking()
                 .Include(x => x.Residents)
-                .FirstAsync(x => x.Id == personalAccountId);
+                .FirstAsync(x => x.Id == personalAccountId, cancellationToken);
             return account.Residents;
         }
     }

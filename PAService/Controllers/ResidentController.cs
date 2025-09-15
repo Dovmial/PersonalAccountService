@@ -1,8 +1,9 @@
-﻿using DataLib.Entities;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using PAService.DTOs;
+using PAService.Models.ResidentVMs;
 using PAService.Services.Interfaces;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PAService.Controllers
@@ -19,11 +20,12 @@ namespace PAService.Controllers
             _residentService = residentService;
         }
 
-        public async Task<ActionResult> Index(int accountId = 0)
+        public async Task<ActionResult> Index(int accountId = 0, CancellationToken cancellationToken = default)
         {
             ViewBag.AccountId = accountId;
-            var residents = await _residentService
-                .GetResidentsByPersonalAccountId(accountId);
+            var residents = accountId > 0
+                ? await _residentService.GetResidentsByPersonalAccountId(accountId, cancellationToken)
+                : await _residentService.GetAllAsync(withPersonalAccount: true, cancellationToken);
             return View(residents);
         }
 
@@ -35,14 +37,16 @@ namespace PAService.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(ResidentDTO residentDto)
+        public async Task<ActionResult> Create(
+            ResidentVM residentDto,
+            CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
                 return View(residentDto);
             }
             var resident = residentDto.ToEntity();
-            await _residentService.CreateAsync(resident);
+            await _residentService.CreateAsync(resident, cancellationToken);
             return RedirectToAction(nameof(Index), "Home");
         }
     }

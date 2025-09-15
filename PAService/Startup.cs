@@ -40,10 +40,6 @@ namespace PAService
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            var culture = new CultureInfo("ru-Ru");
-            CultureInfo.DefaultThreadCurrentCulture = culture;
-            CultureInfo.DefaultThreadCurrentUICulture = culture;
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
