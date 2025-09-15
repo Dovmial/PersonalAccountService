@@ -38,14 +38,15 @@ namespace PAService.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(
-            ResidentVM residentDto,
+            ResidentVM residentVm,
             CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
-                return View(residentDto);
+                _logger.LogError("Модель не валидна");
+                return View(residentVm);
             }
-            var resident = residentDto.ToEntity();
+            var resident = residentVm.ToEntity();
             await _residentService.CreateAsync(resident, cancellationToken);
             return RedirectToAction(nameof(Index), "Home");
         }

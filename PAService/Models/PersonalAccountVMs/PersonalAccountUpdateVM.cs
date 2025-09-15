@@ -4,12 +4,10 @@ using PAService.Models.ResidentVMs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace PAService.Models.PersonalAccountVMs
 {
     public record PersonalAccountUpdateVM(
-
         [Required]
         int Id,
 

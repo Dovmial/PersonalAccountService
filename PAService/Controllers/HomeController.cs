@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using DataLib.Filters;
 using PAService.Models;
 using PAService.Models.PersonalAccountVMs;
 using PAService.Services.Interfaces;
@@ -23,11 +24,18 @@ namespace PAService.Controllers
             _paService = paService;
         }
 
-        public async Task<ActionResult> Index(CancellationToken cancellationToken)
+        public async Task<ActionResult> Index(
+            FilterPersonalAccount filter,
+            [FromQuery] string sort,
+            [FromQuery] string direct,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10,
+            CancellationToken cancellationToken = default)
         {
             var accounts = await _paService.GetAsync(
-                withResidents: true,
-                cancellationToken: cancellationToken);
+                filter, sort, direct, page, pageSize, cancellationToken);
+            ViewBag.Sort = sort;
+            ViewBag.Direct = direct;
             return View(accounts);
         }
 

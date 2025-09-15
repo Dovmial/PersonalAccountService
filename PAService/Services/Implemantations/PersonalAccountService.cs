@@ -3,11 +3,13 @@ using DataLib.Entities;
 using DataLib.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using DataLib.Filters;
 using PAService.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace PAService.Services.Implemantations
 {
@@ -57,17 +59,26 @@ namespace PAService.Services.Implemantations
         }
 
         public async Task<ICollection<PersonalAccount>> GetAsync(
-            bool withResidents,
+            FilterPersonalAccount filter,
+            string sorts,
+            string directions,
+            int page,
+            int pageSize,
             CancellationToken cancellationToken)
         {
-            return await _dbContext.PersonalAccounts
+            IQueryable<PersonalAccount> accounts = _dbContext.PersonalAccounts
                 .AsNoTracking()
-                .WithResidents(withResidents)
-                .ToListAsync(cancellationToken);
+                .WithResidents(true)
+                .ApplyFilter(filter)
+                .ApplySort(sorts, directions)
+                .ToPage(page, pageSize);
+
+            return await accounts.ToListAsync(cancellationToken);
         }
 
+
         public async Task<PersonalAccount> GetByIdAsync(int id, CancellationToken cancellationToken)
-        { 
+        {
             return await _dbContext.PersonalAccounts
                 .WithResidents(true)
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
@@ -76,7 +87,7 @@ namespace PAService.Services.Implemantations
             string numberPersonalAccount,
             CancellationToken cancellationToken)
         {
-            if(!int.TryParse(numberPersonalAccount, out int accountId))
+            if (!int.TryParse(numberPersonalAccount, out int accountId))
                 return await GetByIdAsync(accountId, cancellationToken);
             _logger.LogError("Некорретный номер лицего счета {number}", numberPersonalAccount);
             return null;

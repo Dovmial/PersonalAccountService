@@ -1,4 +1,5 @@
 ﻿using DataLib.Entities;
+using DataLib.Filters;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,7 +8,13 @@ namespace PAService.Services.Interfaces
 {
     public interface IPersonalAccountService
     {
-        Task<ICollection<PersonalAccount>> GetAsync(bool withResidents, CancellationToken cancellationToken);
+        Task<ICollection<PersonalAccount>> GetAsync(
+            FilterPersonalAccount filter,
+            string sort,
+            string direct,
+            int page,
+            int pagesize,
+            CancellationToken cancellationToken);
         Task<PersonalAccount> GetByIdAsync(int id, CancellationToken cancellationToken);
         Task<PersonalAccount> Details(
             string numberPersonalAccount,

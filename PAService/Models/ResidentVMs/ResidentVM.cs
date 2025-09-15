@@ -23,6 +23,7 @@ namespace PAService.Models.ResidentVMs
         public static Resident ToEntity(this ResidentVM vm)
             => new Resident()
             {
+                Id = vm.Id,
                 FirstName = vm.FirstName.Trim(),
                 LastName = vm.LastName.Trim(),
                 SecondName = vm.SecondName.Trim()
@@ -32,6 +33,5 @@ namespace PAService.Models.ResidentVMs
          => residentVMs
                 .Select(x => x.ToEntity())
                 .ToList();
-        
     }
 }

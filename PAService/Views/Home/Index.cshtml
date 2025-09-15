@@ -2,6 +2,37 @@
 @model IEnumerable<PersonalAccount>
 @{
     ViewData["Title"] = "Home Page";
+
+    var sortFields = (ViewBag.Sort as string)?.Split(',') ?? Array.Empty<string>();
+    var sortDirs = (ViewBag.Direct as string)?.Split(',') ?? Array.Empty<string>();
+
+    Func<string, string> GetNextSortDir = (field) =>
+    {
+        int index = Array.IndexOf(sortFields, field);
+        if (index == -1)
+            return "asc"; // по умолчанию
+        return sortDirs.Length > index && sortDirs[index] == "asc" ? "desc" : "asc";
+    };
+
+    Func<string, string> BuildNewSortQuery = (clickedField) =>
+    {
+        var newSort = new List<string>();
+        var newDirs = new List<string>();
+
+        for (int i = 0; i < sortFields.Length; ++i)
+        {
+            if (sortFields[i] != clickedField)
+            {
+                newSort.Add(sortFields[i]);
+                newDirs.Add(sortDirs.Length > i ? sortDirs[i] : "asc");
+            }
+        }
+
+        newSort.Insert(0, clickedField);
+        newDirs.Insert(0, GetNextSortDir(clickedField));
+
+        return $"sort={string.Join(",", newSort)}&dir={string.Join(",", newDirs)}";
+    };
 }
 
 <h1 class=" text-center text-info">Лицевые счета</h1>
@@ -12,9 +43,46 @@
 <table class="table-bordered mx-auto">
     <thead>
         <tr class="align-middle text-center">
-            <th>@Html.DisplayNameFor(m => m.Number)</th>
-            <th>@Html.DisplayNameFor(m => m.Address)</th>
-            <th>@Html.DisplayNameFor(m => m.Area)</th>
+            <th>
+                <a asp-action="Index"
+                   asp-all-route-data="@Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString())"
+                   asp-route-sort="@BuildNewSortQuery("number").Split('&')[0].Split('=')[1]"
+                   asp-route-direct="@BuildNewSortQuery("number").Split('&')[1].Split('=')[1]">
+                    @Html.DisplayNameFor(m => m.Number)
+                </a>
+            </th>
+            <th>
+                 <a asp-action="Index"
+                   asp-all-route-data="@Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString())"
+                   asp-route-sort="@BuildNewSortQuery("address").Split('&')[0].Split('=')[1]"
+                   asp-route-direct="@BuildNewSortQuery("address").Split('&')[1].Split('=')[1]">
+                    @Html.DisplayNameFor(m => m.Address)
+                </a>
+            </th>
+            <th>
+                 <a asp-action="Index"
+                   asp-all-route-data="@Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString())"
+                   asp-route-sort="@BuildNewSortQuery("area").Split('&')[0].Split('=')[1]"
+                   asp-route-direct="@BuildNewSortQuery("area").Split('&')[1].Split('=')[1]">
+                    @Html.DisplayNameFor(m => m.Area)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-all-route-data="@Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString())"
+                   asp-route-sort="@BuildNewSortQuery("dateactivate").Split('&')[0].Split('=')[1]"
+                   asp-route-direct="@BuildNewSortQuery("dateactivate").Split('&')[1].Split('=')[1]">
+                    @Html.DisplayNameFor(m => m.DateActivate)
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-all-route-data="@Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString())"
+                   asp-route-sort="@BuildNewSortQuery("datefinish").Split('&')[0].Split('=')[1]"
+                   asp-route-direct="@BuildNewSortQuery("datefinish").Split('&')[1].Split('=')[1]">
+                    @Html.DisplayNameFor(m => m.DateFinish)
+                </a>
+            </th>
             <th>@Html.DisplayNameFor(m => m.ResidentsCount)</th>
         </tr>
     </thead>
@@ -23,8 +91,10 @@
         {
             <tr class="align-middle text-center">
                 <td width="10%">@Html.DisplayFor(x => item.Number)</td>
-                <td width="50%">@Html.DisplayFor(x => item.Address)</td>
+                <td width="30%">@Html.DisplayFor(x => item.Address)</td>
                 <td width="10%">@Html.DisplayFor(x => item.Area)</td>
+                <td width="10%">@Html.DisplayFor(x => item.DateActivate)</td>
+                <td width="10%">@Html.DisplayFor(x => item.DateFinish)</td>
                 <td width="10%">@Html.DisplayFor(x => item.ResidentsCount)</td>
                 <td width="20%" class="table-borderless ">
                     <table class="mx-auto">
