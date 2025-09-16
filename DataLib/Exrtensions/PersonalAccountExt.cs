@@ -23,8 +23,8 @@ namespace DataLib.Extensions
                 return accounts;
 
             //номер уникальный, другие фильтры не важны, всегда один результат
-            if (!string.IsNullOrEmpty(filter.numberOfPersonalAccount))
-                return accounts.FindByNumberPersonalAccount(filter.numberOfPersonalAccount);
+            if (!string.IsNullOrEmpty(filter.NumberOfPersonalAccount))
+                return accounts.FindByNumberPersonalAccount(filter.NumberOfPersonalAccount);
 
             return accounts
                 .HasResidents(filter.IsAnyResidents)

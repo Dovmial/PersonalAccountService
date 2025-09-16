@@ -36,6 +36,7 @@ namespace PAService.Controllers
                 filter, sort, direct, page, pageSize, cancellationToken);
             ViewBag.Sort = sort;
             ViewBag.Direct = direct;
+            ViewBag.Filter = filter;
             return View(accounts);
         }
 

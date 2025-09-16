@@ -4,7 +4,7 @@ namespace DataLib.Filters
 {
     public record FilterPersonalAccount
         (
-            string numberOfPersonalAccount,
+            string NumberOfPersonalAccount,
             DateTime? ActiveForDate,
             string Address,
             bool? IsAnyResidents,

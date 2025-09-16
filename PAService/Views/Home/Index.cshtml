@@ -1,7 +1,9 @@
 ﻿@using DataLib.Entities
+@using DataLib.Filters
 @model IEnumerable<PersonalAccount>
 @{
     ViewData["Title"] = "Home Page";
+    FilterPersonalAccount Filter = ViewBag.Filter;
 
     var sortFields = (ViewBag.Sort as string)?.Split(',') ?? Array.Empty<string>();
     var sortDirs = (ViewBag.Direct as string)?.Split(',') ?? Array.Empty<string>();
@@ -36,6 +38,45 @@
 }
 
 <h1 class=" text-center text-info">Лицевые счета</h1>
+<div class="card mb-4">
+    <div class="card-header">
+        <h5>Фильтры</h5>
+    </div>
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-3">
+                <label asp-for="@Filter.NumberOfPersonalAccount" class="form-label">Номер счета</label>
+                <input asp-for="@Filter.NumberOfPersonalAccount" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label asp-for="@Filter.Address" class="form-label">Адрес</label>
+                <input asp-for="@Filter.Address" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label asp-for="@Filter.Fullname" class="form-label">ФИО</label>
+                <input asp-for="@Filter.Fullname" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label asp-for="@Filter.ActiveForDate" class="form-label">Дата активации</label>
+                <input asp-for="@Filter.ActiveForDate" type="date" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <div class="form-check mt-4">
+                    <label asp-for="@Filter.IsAnyResidents" class="form-check-label">Жильцы</label>
+                    <select asp-for="@Filter.IsAnyResidents" class="form-select">
+                        <option value="">Не выбрано</option>
+                        <option value="true">Есть жильцы</option>
+                        <option value="false">Нет жильцов</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-12 mt-3">
+                <button type="submit" class="btn btn-primary">Применить</button>
+                <a asp-action="Index" class="btn btn-secondary">Сбросить</a>
+            </div>
+        </form>
+    </div>
+</div>
 
 <div class="text-right">
     <a asp-action="Create" class="btn btn-primary mx-1 my-1">Добавить</a>
